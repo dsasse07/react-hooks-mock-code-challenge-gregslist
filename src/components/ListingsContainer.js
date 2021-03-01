@@ -1,11 +1,34 @@
 import React from "react";
+import ListingCard from "./ListingCard";
 // import ListingCard from "./ListingCard";
 
-function ListingsContainer() {
+function ListingsContainer({listings, query, onToggleFav, onDeleteListing}) {
+
+  const sortedListings = listings.sort( (listingA, listingB) => {
+    return listingA[query.sortBy].localeCompare( listingB[query.sortBy] )
+  })
+
+  const filteredListings = sortedListings.filter( listing => {
+    return listing.description.toLowerCase().includes(query.searchString.toLowerCase())
+  })
+
+
+  const listingComponents = filteredListings.map( listing => {
+    return (
+      <ListingCard 
+        key ={listing.id} 
+        listing={listing} 
+        onToggleFav={onToggleFav}
+        onDeleteListing={onDeleteListing}
+      />
+    )
+  })
+
+
   return (
     <main>
       <ul className="cards">
-        {/* use the ListingCard component to display listings */}
+        {listingComponents}
       </ul>
     </main>
   );
